@@ -39,7 +39,7 @@ mod imp {
 
   pub fn gettid() -> u64 {
     let mut result = 0;
-    let _ = pthread_threadid_np(0, &mut result);
+    unsafe {let _ = pthread_threadid_np(0, &mut result); }
     result
   }
 }
