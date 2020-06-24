@@ -47,7 +47,7 @@ mod imp {
 #[cfg(target_os = "windows")]
 mod imp {
   pub fn gettid() -> u64 {
-    unsafe { winapi::um::processthreadsapi::GetCurrentThreadId() }
+    unsafe { winapi::um::processthreadsapi::GetCurrentThreadId().into() }
   }
 }
 
