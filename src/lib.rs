@@ -30,7 +30,7 @@ mod imp {
   }
 }
 
-#[cfg(target_os = "macos")]
+#[cfg(any(target_os = "macos", target_os = "ios"))]
 mod imp {
   #[link(name = "pthread")]
   extern "C" {
@@ -41,6 +41,18 @@ mod imp {
     let mut result = 0;
     unsafe {let _ = pthread_threadid_np(0, &mut result); }
     result
+  }
+}
+
+#[cfg(target_os = "freebsd")]
+mod imp {
+  #[link(name = "pthread")]
+  extern "C" {
+    fn pthread_getthreadid_np() -> libc::c_int;
+  }
+
+  pub fn gettid() -> u64 {
+    unsafe { pthread_getthreadid_np() as u64 }
   }
 }
 
