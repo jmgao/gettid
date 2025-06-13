@@ -58,13 +58,11 @@ mod imp {
 mod imp {
   #[link(name = "pthread")]
   extern "C" {
-    fn pthread_getthreadid_np(thread: libc::pthread_t, thread_id: *mut u64) -> libc::c_int;
+    fn pthread_getthreadid_np() -> core::ffi::c_int;
   }
 
   pub fn gettid() -> u64 {
-    let mut result = 0;
-    unsafe {let _ = pthread_getthreadid_np(0, &mut result); }
-    result
+    unsafe { pthread_getthreadid_np() }
   }
 }
 
