@@ -11,7 +11,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-//! A crate to help with fetching thread ids across multiple platforms.
+#![doc = include_str!("../README.md")]
 
 /// Get the current thread's thread id.
 ///
