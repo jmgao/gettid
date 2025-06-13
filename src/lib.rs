@@ -48,7 +48,8 @@ mod imp {
 
   pub fn gettid() -> u64 {
     let mut result = 0;
-    unsafe {let _ = pthread_threadid_np(0, &mut result); }
+    let res = unsafe { pthread_threadid_np(0, &mut result) };
+    assert_eq!(res, 0, "error retrieving thread ID");
     result
   }
 }
