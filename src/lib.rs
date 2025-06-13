@@ -35,20 +35,15 @@ pub fn gettid() -> u64 {
 #[cfg(any(target_os = "linux", target_os = "android"))]
 mod imp {
   pub fn gettid() -> u64 {
-    unsafe { libc::syscall(libc::SYS_gettid) as u64 }
+    unsafe { libc::gettid() as u64 }
   }
 }
 
 #[cfg(target_os = "macos")]
 mod imp {
-  #[link(name = "pthread")]
-  extern "C" {
-    fn pthread_threadid_np(thread: libc::pthread_t, thread_id: *mut u64) -> libc::c_int;
-  }
-
   pub fn gettid() -> u64 {
     let mut result = 0;
-    let res = unsafe { pthread_threadid_np(0, &mut result) };
+    let res = unsafe { libc::pthread_threadid_np(0, &mut result) };
     assert_eq!(res, 0, "error retrieving thread ID");
     result
   }
@@ -56,13 +51,8 @@ mod imp {
 
 #[cfg(target_os = "freebsd")]
 mod imp {
-  #[link(name = "pthread")]
-  extern "C" {
-    fn pthread_getthreadid_np() -> core::ffi::c_int;
-  }
-
   pub fn gettid() -> u64 {
-    unsafe { pthread_getthreadid_np() }
+    unsafe { libc::pthread_getthreadid_np() }
   }
 }
 
