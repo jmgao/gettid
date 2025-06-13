@@ -19,12 +19,12 @@
 /// use gettid::gettid;
 /// let main_tid = gettid();
 /// let pid = std::process::id();
-/// 
+///
 /// if cfg!(target_os = "linux") {
 ///     // On Linux, the first thread ID is the same as the PID
 ///     assert_eq!(pid as u64, main_tid);
 /// }
-/// 
+///
 /// let thread_tid = std::thread::spawn(gettid).join().unwrap();
 /// assert_ne!(main_tid, thread_tid);
 /// ```
@@ -47,7 +47,17 @@ pub fn gettid_impl() -> u64 {
 
 #[cfg(target_os = "freebsd")]
 pub fn gettid_impl() -> u64 {
-  unsafe { libc::pthread_getthreadid_np() }
+  unsafe { libc::pthread_getthreadid_np() as u64 }
+}
+
+#[cfg(target_os = "openbsd")]
+pub fn gettid_impl() -> u64 {
+  unsafe { libc::getthrid() as u64 }
+}
+
+#[cfg(target_os = "netbsd")]
+pub fn gettid_impl() -> u64 {
+  unsafe { libc::_lwp_self() as u64 }
 }
 
 #[cfg(target_os = "windows")]
