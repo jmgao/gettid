@@ -29,40 +29,32 @@
 /// assert_ne!(main_tid, thread_tid);
 /// ```
 pub fn gettid() -> u64 {
-  imp::gettid()
+  gettid_impl()
 }
 
 #[cfg(any(target_os = "linux", target_os = "android"))]
-mod imp {
-  pub fn gettid() -> u64 {
-    unsafe { libc::gettid() as u64 }
-  }
+pub fn gettid_impl() -> u64 {
+  unsafe { libc::gettid() as u64 }
 }
 
 #[cfg(target_os = "macos")]
-mod imp {
-  pub fn gettid() -> u64 {
-    let mut result = 0;
-    let res = unsafe { libc::pthread_threadid_np(0, &mut result) };
-    assert_eq!(res, 0, "error retrieving thread ID");
-    result
-  }
+pub fn gettid_impl() -> u64 {
+  let mut result = 0;
+  let res = unsafe { libc::pthread_threadid_np(0, &mut result) };
+  assert_eq!(res, 0, "error retrieving thread ID");
+  result
 }
 
 #[cfg(target_os = "freebsd")]
-mod imp {
-  pub fn gettid() -> u64 {
-    unsafe { libc::pthread_getthreadid_np() }
-  }
+pub fn gettid_impl() -> u64 {
+  unsafe { libc::pthread_getthreadid_np() }
 }
 
 #[cfg(target_os = "windows")]
-mod imp {
+pub fn gettid() -> u64 {
   extern "system" {
     unsafe fn GetCurrentThreadId() -> u32;
   }
-  
-  pub fn gettid() -> u64 {
-    unsafe { GetCurrentThreadId().into() }
-  }
+
+  unsafe { GetCurrentThreadId().into() }
 }
