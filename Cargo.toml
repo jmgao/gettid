@@ -5,8 +5,6 @@ authors = ["Josh Gao <josh@jmgao.dev>"]
 edition = "2018"
 
 description = "Helper to get an integer ID for the current thread"
-homepage = "https://github.com/jmgao/gettid"
-documentation = "https://docs.rs/gettid"
 repository = "https://github.com/jmgao/gettid"
 keywords = ["gettid", "pthread"]
 license = "0BSD"
