@@ -61,9 +61,9 @@ pub fn gettid_impl() -> u64 {
 }
 
 #[cfg(target_os = "windows")]
-pub fn gettid() -> u64 {
-  extern "system" {
-    unsafe fn GetCurrentThreadId() -> u32;
+pub fn gettid_impl() -> u64 {
+  unsafe extern "system" {
+    fn GetCurrentThreadId() -> u32;
   }
 
   unsafe { GetCurrentThreadId().into() }
