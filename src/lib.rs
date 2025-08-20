@@ -25,6 +25,9 @@
 ///     assert_eq!(pid as u64, main_tid);
 /// }
 ///
+/// // gettid() returns a consistent value for a given thread.
+/// assert_eq!(main_tid, gettid());
+///
 /// let thread_tid = std::thread::spawn(gettid).join().unwrap();
 /// assert_ne!(main_tid, thread_tid);
 /// ```
